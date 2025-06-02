@@ -120,7 +120,7 @@ const EditorPage = () => {
   };
 
   return (
-    <div className="w-full flex h-screen bg-gray-900">
+    <div className="w-full flex h-[100vh] bg-gray-900">
 
       
       {/* Sidebar */}
