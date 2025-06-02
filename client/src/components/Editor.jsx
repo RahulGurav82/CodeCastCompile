@@ -125,7 +125,7 @@ const Editor = ({ socketRef, roomId, codeRef, onCodeChange, initialCode  }) => {
 
   return (
     <div className="h-screen">
-      <textarea id="realTimeEditor" className="bg-white"></textarea>
+      <textarea id="realTimeEditor" className=""></textarea>
     </div>
   );
 };

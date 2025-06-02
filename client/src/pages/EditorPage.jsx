@@ -121,16 +121,11 @@ const EditorPage = () => {
 
   return (
     <div className="w-full flex h-screen bg-gray-900">
-      {/* Connection status indicator */}
-      <div className={`fixed top-4 right-4 px-3 py-1 rounded text-white text-sm z-50 ${
-        isSocketConnected ? 'bg-green-500' : 'bg-red-500'
-      }`}>
-        {isSocketConnected ? 'Connected' : 'Disconnected'}
-      </div>
+
       
       {/* Sidebar */}
-      <div className="w-56 bg-[#202226] border-r border-gray-700">
-        <Sidebar client={client} />
+      <div className="w-72 bg-[#202226] border-r border-gray-700">
+        <Sidebar client={client} roomId={roomId} />
       </div>
       
       {/* Main Content Area */}
@@ -169,6 +164,12 @@ const EditorPage = () => {
             </div>
             <div className="text-sm">
               Room: <span className="text-white font-mono">{roomId}</span>
+            </div>
+            {/* Connection status indicator */}
+            <div className={` px-3 py-1 rounded text-white text-sm z-50 ${
+              isSocketConnected ? 'bg-green-500' : 'bg-red-500'
+            }`}>
+              {isSocketConnected ? 'Connected' : 'Disconnected'}
             </div>
           </div>
         </div>

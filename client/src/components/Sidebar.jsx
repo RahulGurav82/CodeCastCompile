@@ -1,8 +1,9 @@
 import { FileCode, Copy, LogOut, Users } from 'lucide-react'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Profile = ({ client }) => {
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
   
   // Generate consistent colors based on username
   const getAvatarColor = (username) => {
@@ -25,8 +26,8 @@ const Profile = ({ client }) => {
       className={`w-full flex h-14 transition-all duration-300 transform ${
         isHovered ? 'scale-105' : 'scale-100'
       }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      // onMouseEnter={() => setIsHovered(true)}
+      // onMouseLeave={() => setIsHovered(false)}
     >
       <div className={`w-14 h-14 text-white ${getAvatarColor(client.username)} rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-300 ${
         isHovered ? 'shadow-xl rotate-3' : ''
@@ -43,13 +44,19 @@ const Profile = ({ client }) => {
   )
 }
 
-const Sidebar = ({ client = [] }) => {
+const Sidebar = ({ client = [], roomId }) => {
   const [roomIdCopied, setRoomIdCopied] = useState(false)
   const [isLeaveHovered, setIsLeaveHovered] = useState(false)
+    const navigate = useNavigate();
 
   const handleCopyRoomId = () => {
     setRoomIdCopied(true)
+    navigator.clipboard.writeText(roomId);
     setTimeout(() => setRoomIdCopied(false), 2000)
+  }
+
+  const handleLeaveRoom = () => {
+    navigate("/")
   }
 
   const sampleClients = client.length > 0 ? client : [
@@ -115,7 +122,8 @@ const Sidebar = ({ client = [] }) => {
             </span>
           </button>
           
-          <button 
+          <button
+            onClick={handleLeaveRoom} 
             onMouseEnter={() => setIsLeaveHovered(true)}
             onMouseLeave={() => setIsLeaveHovered(false)}
             className={`group relative px-4 py-3 rounded-xl flex items-center justify-center cursor-pointer font-medium transition-all duration-300 overflow-hidden ${
