@@ -15,7 +15,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // for development
+    origin: process.env.FRONTEND_URL, // for development
     methods: ["GET", "POST"],
   },
 });
