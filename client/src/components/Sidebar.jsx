@@ -68,6 +68,7 @@ const Sidebar = ({ client = [], roomId }) => {
 
   return (
     <div className='h-full w-full bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden'>
+      
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-10 -left-10 w-20 h-20 bg-purple-500/10 rounded-full animate-pulse"></div>
@@ -75,30 +76,29 @@ const Sidebar = ({ client = [], roomId }) => {
         <div className="absolute bottom-1/4 left-5 w-12 h-12 bg-green-500/10 rounded-full animate-pulse delay-2000"></div>
       </div>
       
-      <div className='relative z-10 h-full flex flex-col p-6'>
-        {/* Header */}
-        <div className='flex items-center justify-center text-white h-24 text-2xl gap-3 mb-6'>
+      <div className='relative z-10 h-full flex flex-col p-4 md:p-6'> {/* Changed padding */}
+        {/* Header - simplified for mobile */}
+        <div className='flex items-center justify-center text-white h-16 md:h-24 text-xl md:text-2xl gap-3 mb-4 md:mb-6'>
           <div className="relative">
-            <FileCode className="w-8 h-8 text-purple-400 animate-pulse" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+            <FileCode className="w-6 h-6 md:w-8 md:h-8 text-purple-400 animate-pulse" />
+            <div className="absolute -top-1 -right-1 w-2 h-2 md:w-3 md:h-3 bg-green-400 rounded-full animate-ping"></div>
           </div>
-          <div className="w-px h-8 bg-gradient-to-b from-transparent via-gray-500 to-transparent"></div>
+          <div className="w-px h-6 md:h-8 bg-gradient-to-b from-transparent via-gray-500 to-transparent"></div>
           <span className='font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent'>
             CodeCast
           </span>
         </div>
         
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-6"></div>
-        
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-4 md:mb-6"></div>        
         {/* Users section */}
-        <div className="flex-1 overflow-hidden">
-          <div className="flex items-center gap-2 text-gray-400 text-sm font-medium mb-4">
-            <Users className="w-4 h-4" />
+       <div className="flex-1 overflow-hidden">
+          <div className="flex items-center gap-2 text-gray-400 text-xs md:text-sm font-medium mb-3 md:mb-4">
+            <Users className="w-3 h-3 md:w-4 md:h-4" />
             <span>Active Users ({sampleClients.length})</span>
           </div>
           
-          <div className='flex flex-col gap-3 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent'>
+          <div className='flex flex-col gap-2 md:gap-3 max-h-64 md:max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent'>
             {sampleClients.map(client => (
               <Profile key={client.socketId} client={client} />
             ))}

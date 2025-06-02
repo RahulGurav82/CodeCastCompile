@@ -6,7 +6,6 @@ import PageNotFound from "./pages/PageNotFound";
 
 const App = () => {
   return (
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/editor/:roomId" element={<EditorPage />} />

@@ -5,7 +5,7 @@ import Compiler from "../components/Compiler";
 import { initSocket } from "../socket";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Code, Terminal, Users } from "lucide-react";
+import { Code, Terminal, Users, Menu, X } from "lucide-react";
 
 const EditorPage = () => {
   const socketRef = useRef(null);
@@ -17,6 +17,7 @@ const EditorPage = () => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [activeTab, setActiveTab] = useState("editor"); // 'editor' or 'compiler'
   const [currentCode, setCurrentCode] = useState("");
+    const [showSidebar, setShowSidebar] = useState(false); // New state for mobile sidebar
 
   const handleError = (err) => {
     console.log("connection Error", err);
@@ -120,18 +121,37 @@ const EditorPage = () => {
   };
 
   return (
-    <div className="w-full flex h-screen bg-gray-900">
+    <div className="w-full flex flex-col md:flex-row h-[100vh] bg-gray-900">
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-[#0f43ab] border-b border-gray-700">
+        <button 
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="text-white p-2"
+        >
+          {showSidebar ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        <div className="flex items-center space-x-4 text-white">
+          <div className="flex items-center space-x-2">
+            <Users size={16} />
+            <span>{client.length} online</span>
+          </div>
+          <div className={`px-3 py-1 rounded text-white text-sm ${
+            isSocketConnected ? 'bg-green-500' : 'bg-red-500'
+          }`}>
+            {isSocketConnected ? 'Connected' : 'Disconnected'}
+          </div>
+        </div>
+      </div>
 
-      
-      {/* Sidebar */}
-      <div className="w-72 bg-[#202226] border-r border-gray-700">
+      {/* Sidebar - now conditionally rendered on mobile */}
+      <div className={`${showSidebar ? 'block' : 'hidden'} md:block w-full md:w-72 bg-[#0f43ab] border-r border-gray-700 h-full`}>
         <Sidebar client={client} roomId={roomId} />
       </div>
       
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Tab Navigation */}
-        <div className="flex bg-gray-800 border-b border-gray-700">
+      <div className="flex-1 flex flex-col h-screen">
+        {/* Tab Navigation - hidden on mobile */}
+        <div className="hidden md:flex bg-gray-800 border-b border-gray-700">
           <button
             onClick={() => setActiveTab("editor")}
             className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors ${
@@ -158,20 +178,47 @@ const EditorPage = () => {
 
           {/* Room Info */}
           <div className="ml-auto flex items-center space-x-4 px-6 py-3 text-gray-400">
-            <div className="flex items-center space-x-2">
-              <Users size={16} />
-              <span>{client.length} online</span>
-            </div>
             <div className="text-sm">
               Room: <span className="text-white font-mono">{roomId}</span>
             </div>
-            {/* Connection status indicator */}
-            <div className={` px-3 py-1 rounded text-white text-sm z-50 ${
-              isSocketConnected ? 'bg-green-500' : 'bg-red-500'
-            }`}>
-              {isSocketConnected ? 'Connected' : 'Disconnected'}
-            </div>
+         <div className="flex items-center space-x-2">
+            <Users size={16} />
+            <span>{client.length} online</span>
           </div>
+          <div className={`px-3 py-1 rounded text-white text-sm ${
+            isSocketConnected ? 'bg-green-500' : 'bg-red-500'
+          }`}>
+            {isSocketConnected ? 'Connected' : 'Disconnected'}
+          </div>
+
+          </div>
+        </div>
+
+        {/* Mobile Tab Navigation */}
+        <div className="md:hidden flex bg-gray-800 border-b border-gray-700">
+          <button
+            onClick={() => setActiveTab("editor")}
+            className={`flex-1 flex items-center justify-center space-x-2 py-3 text-sm font-medium transition-colors ${
+              activeTab === "editor"
+                ? "bg-gray-700 text-white border-b-2 border-blue-500"
+                : "text-gray-400 hover:text-white hover:bg-gray-700"
+            }`}
+          >
+            <Code size={16} />
+            <span>Editor</span>
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("compiler")}
+            className={`flex-1 flex items-center justify-center space-x-2 py-3 text-sm font-medium transition-colors ${
+              activeTab === "compiler"
+                ? "bg-gray-700 text-white border-b-2 border-blue-500"
+                : "text-gray-400 hover:text-white hover:bg-gray-700"
+            }`}
+          >
+            <Terminal size={16} />
+            <span>Compiler</span>
+          </button>
         </div>
 
         {/* Content */}
@@ -183,7 +230,7 @@ const EditorPage = () => {
               setClient={setClient}
               codeRef={codeRef}
               onCodeChange={handleCodeChange}
-              initialCode={currentCode} // Pass current code as initial value
+              initialCode={currentCode}
             />
           ) : (
             <Compiler

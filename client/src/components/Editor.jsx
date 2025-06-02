@@ -9,6 +9,7 @@ import "codemirror/addon/edit/closebrackets";
 const Editor = ({ socketRef, roomId, codeRef, onCodeChange, initialCode  }) => {
   const editorRef = useRef(null);
   const isRemoteChange = useRef(false); // Flag to prevent infinite loops
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const editor = CodeMirror.fromTextArea(
@@ -20,13 +21,23 @@ const Editor = ({ socketRef, roomId, codeRef, onCodeChange, initialCode  }) => {
         autoCloseBrackets: true,
         lineNumbers: true,
         value: initialCode || codeRef.current || "", // Use initialCode first
+        lineWrapping: true, // Add this for mobile
       }
     );
 
     
 
     editorRef.current = editor;
+        // Make editor responsive
+    const resizeObserver = new ResizeObserver(() => {
+      editor.setSize("100%", "100%");
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
     editor.setSize(null, "100%");
+
 
     // Improved change handler with debouncing
     let changeTimeout;
@@ -54,6 +65,7 @@ const Editor = ({ socketRef, roomId, codeRef, onCodeChange, initialCode  }) => {
 
     // Cleanup timeout on unmount
     return () => {
+      resizeObserver.disconnect();
       clearTimeout(changeTimeout);
     };
   }, []);
@@ -124,7 +136,7 @@ const Editor = ({ socketRef, roomId, codeRef, onCodeChange, initialCode  }) => {
   }, [roomId, onCodeChange]);
 
   return (
-    <div className="h-screen">
+    <div className="h-full" ref={containerRef}>
       <textarea id="realTimeEditor" className=""></textarea>
     </div>
   );
