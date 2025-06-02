@@ -23,6 +23,10 @@ const io = new Server(server, {
 const userSocketMap = {};
 const roomStates = new Map(); // Track code state per room
 
+app.get("/", (req, res) => {
+  res.send("Running")
+})
+
 // JDoodle API proxy endpoint
 app.post("/api/execute", async (req, res) => {
   try {
